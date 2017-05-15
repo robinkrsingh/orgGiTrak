@@ -9,10 +9,10 @@
         android:id="@+id/title"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textColor="@android:color/black"
+        android:textColor="#ffffff"
         android:gravity="center"
         android:textSize="16sp"
-        android:background="@android:color/darker_gray"
+        android:background="@color/colorPrimary"
         android:padding="10dp"/>
 
     <ListView

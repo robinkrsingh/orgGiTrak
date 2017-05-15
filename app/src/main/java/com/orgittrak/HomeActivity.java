@@ -24,11 +24,12 @@ public class HomeActivity extends AppCompatActivity implements OrgListFragment.O
 
 
 
+
         }
     }
 
     @Override
-    public void onOrgSelected(int pos) {
+    public void onOrgSelected(int pos, String init) {
 
 
         OrgDetailFragment orgDetailFragment = (OrgDetailFragment)
@@ -40,7 +41,7 @@ public class HomeActivity extends AppCompatActivity implements OrgListFragment.O
             orgDetailFragment.updateOrganisation(pos);
 
 
-        } else {
+        } else if(init.equals("no")){
 
             OrgDetailFragment orgDetailFrg= new OrgDetailFragment();
             Bundle args = new Bundle();

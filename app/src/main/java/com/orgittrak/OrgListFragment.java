@@ -59,7 +59,7 @@ public class OrgListFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                onItemSelected( (currentPage*NUM_ITEMS_PAGE)+position);
+                onItemSelected( (currentPage*NUM_ITEMS_PAGE)+position, "no");
                 Log.i(TAG, (currentPage*NUM_ITEMS_PAGE)+position+1+"");
             }
         });
@@ -88,7 +88,7 @@ public class OrgListFragment extends Fragment {
                     loadList(0);
 
                     CheckBtnBackGroud(0);
-                    onItemSelected(0);
+                    onItemSelected(0, "yes");
 
                 } else {
 
@@ -185,9 +185,9 @@ public class OrgListFragment extends Fragment {
     }
 
     // TODO: Rename method, update argument and hook method into UI event
-    public void onItemSelected(int pos) {
+    public void onItemSelected(int pos, String init) {
         if (mListener != null) {
-            mListener.onOrgSelected(pos);
+            mListener.onOrgSelected(pos, init);
         }
     }
 
@@ -211,6 +211,6 @@ public class OrgListFragment extends Fragment {
 
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onOrgSelected(int pos);
+        void onOrgSelected(int pos, String init);
     }
 }
