@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/imgAvatar"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        app:srcCompat="@drawable/icon" />
+
+    <TextView
+        android:id="@+id/tvOrganisation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/imgAvatar"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="19dp"
+        android:text="Organisation Name:"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvOrganisationVal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tvOrganisation"
+        android:layout_alignStart="@+id/tvOrganisation"
+        android:layout_below="@+id/tvOrganisation"
+        android:layout_marginTop="25dp"
+        android:text="Name" />
+
+    <TextView
+        android:id="@+id/tvDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tvOrganisationVal"
+        android:layout_alignStart="@+id/tvOrganisationVal"
+        android:layout_below="@+id/tvOrganisationVal"
+        android:layout_marginTop="22dp"
+        android:text="Description:"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvDescriptionVal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tvDescription"
+        android:layout_alignStart="@+id/tvDescription"
+        android:layout_below="@+id/tvDescription"
+        android:layout_marginTop="24dp"
+        android:text="Description" />
+
+</RelativeLayout>
