@@ -14,12 +14,16 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.orgittrak.Adapters.OrganisationAdapter;
 import com.orgittrak.Models.Organisation;
 import com.orgittrak.Rest.ApiClient;
 import com.orgittrak.Rest.ApiInterface;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -37,7 +41,7 @@ public class OrgListFragment extends Fragment {
 
     }
     String TAG = "OrgListFragment";
-    static ArrayList<Organisation> organisationList;
+    ArrayList<Organisation> organisationList;
     ListView listView;
     int TOTAL_LIST_ITEMS ;
     int NUM_ITEMS_PAGE = 10;
@@ -59,16 +63,23 @@ public class OrgListFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                onItemSelected( (currentPage*NUM_ITEMS_PAGE)+position, "no");
-                Log.i(TAG, (currentPage*NUM_ITEMS_PAGE)+position+1+"");
+                Gson gson = new Gson();
+                String strOrganisation = gson.toJson(organisationList.get((currentPage*NUM_ITEMS_PAGE)+position));
+                onItemSelected(strOrganisation, "no");
+
             }
         });
         if (savedInstanceState != null) {
+
+            Gson gson = new Gson();
+            Type listOfOrganisation = new TypeToken<List<Organisation>>(){}.getType();
+            organisationList = gson.fromJson(savedInstanceState.getString("strListOrganisation"), listOfOrganisation);
+            currentPage = savedInstanceState.getInt("currentPage");
             TOTAL_LIST_ITEMS = organisationList.size();
             Btnfooter(v);
-            loadList(0);
+            loadList(currentPage);
 
-            CheckBtnBackGroud(0);
+            CheckBtnBackGroud(currentPage);
 
             return v;
         }
@@ -82,13 +93,15 @@ public class OrgListFragment extends Fragment {
 
                 if (response.code() == 200) {
                     organisationList = response.body();
-                    Log.d(TAG, "Number of organisations received: " + organisationList.size());
+
                     TOTAL_LIST_ITEMS = organisationList.size();
                     Btnfooter(v);
-                    loadList(0);
+                    loadList(currentPage);
 
-                    CheckBtnBackGroud(0);
-                    onItemSelected(0, "yes");
+                    CheckBtnBackGroud(currentPage);
+                    Gson gson = new Gson();
+                    String strOrganisation = gson.toJson(organisationList.get(currentPage));
+                    onItemSelected(strOrganisation, "yes");
 
                 } else {
 
@@ -185,9 +198,9 @@ public class OrgListFragment extends Fragment {
     }
 
     // TODO: Rename method, update argument and hook method into UI event
-    public void onItemSelected(int pos, String init) {
+    public void onItemSelected(String  strOrg, String init) {
         if (mListener != null) {
-            mListener.onOrgSelected(pos, init);
+            mListener.onOrgSelected(strOrg, init);
         }
     }
 
@@ -207,10 +220,21 @@ public class OrgListFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Gson gson = new Gson();
+        Type listOfOrganisation = new TypeToken<List<Organisation>>(){}.getType();
+        String strListOrganisation = gson.toJson(organisationList, listOfOrganisation);
+        outState.putString("strListOrganisation", strListOrganisation);
+        outState.putInt("currentPage", currentPage);
 
+
+        //Save the fragment's state here
+    }
 
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onOrgSelected(int pos, String init);
+        void onOrgSelected(String strOrg, String init);
     }
 }

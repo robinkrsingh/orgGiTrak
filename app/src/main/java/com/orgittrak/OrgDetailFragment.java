@@ -9,19 +9,21 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.orgittrak.Models.Organisation;
 import com.squareup.picasso.Picasso;
+
+import java.lang.reflect.Type;
 
 
 public class OrgDetailFragment extends Fragment {
 
 
-
-
-    int orgPos;
     TextView tvOrgName, tvDescription;
     ImageView imgAvatar;
     Organisation organisation;
+    String strOrg;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,8 +42,10 @@ public class OrgDetailFragment extends Fragment {
 
         imgAvatar = (ImageView) v.findViewById(R.id.imgAvatar);
         if (savedInstanceState != null) {
-            orgPos = savedInstanceState.getInt("orgPos");
-            updateOrganisation(orgPos);
+
+            strOrg = savedInstanceState.getString("strOrg");
+
+            updateOrganisation(strOrg);
         }
 
         // Inflate the layout for this fragment
@@ -67,29 +71,36 @@ public class OrgDetailFragment extends Fragment {
 
 
         Bundle args = getArguments();
-        if (args != null ) {
+        if (args != null) {
 
-            orgPos = args.getInt("orgPos");
-            organisation = OrgListFragment.organisationList.get(orgPos);
-            updateOrganisation(orgPos);
+            strOrg = args.getString("strOrg");
+            updateOrganisation(strOrg);
 
-        } else if (orgPos != 0 && organisation != null) {
+        } else if (strOrg != null) {
 
-            updateOrganisation(orgPos);
+            updateOrganisation(strOrg);
 
         }
     }
 
-    public void updateOrganisation(int pos) {
-        orgPos = pos;
-        organisation = OrgListFragment.organisationList.get(orgPos);
-        if(organisation != null) {
+    public void updateOrganisation(String strOrg) {
+
+        this.strOrg = strOrg;
+        Gson gson = new Gson();
+        Type typeOrganisation = new TypeToken<Organisation>() {
+        }.getType();
+        organisation = gson.fromJson(strOrg, typeOrganisation);
+
+        if (organisation != null) {
             tvOrgName.setText(organisation.getLogin());
             tvDescription.setText(organisation.getDescription());
             Picasso.with(getActivity())
                     .load(organisation.getavatar_url())
                     .into(imgAvatar);
         }
+
+
+
 
     }
 
@@ -98,8 +109,9 @@ public class OrgDetailFragment extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        // Save the current Organisation selection
-        outState.putInt("orgPos", orgPos);
+        // Save the current Organisation
+        outState.putString("strOrg", strOrg);
+
     }
 
 
